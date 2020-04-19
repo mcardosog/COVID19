@@ -3,7 +3,7 @@ import SpeechRecognition from "react-speech-recognition";
 import './App.css';
 import 'semantic-ui-css/semantic.min.css';
 import Speech from 'speak-tts'
-import {Button, Icon, Label, Transition, Message, Modal, Header, Divider} from 'semantic-ui-react'
+import {Button, Icon, Label, Transition, Message} from 'semantic-ui-react'
 
 //user md
 
@@ -12,24 +12,36 @@ class VoiceControl extends Component {
         visibleLabel: true,
         input: '',
         speech: null,
-        showAnswer:'grey'
+        showAnswer:'grey',
+        answer:' '
     }
 
     interpretResult = () => {
+
+        if(this.state.answer == null || this.state.answer === '') {
+            console.log('Here');
+            console.log(this.state);
+            this.setState({
+                visibleLabel:true,
+                showAnswer: 'grey'
+            })
+            this.props.resetTranscript();
+            return;
+        }
+
         this.setState({
             showAnswer: 'teal'
         })
         var self = this;
-        this.state.speech.speak({text: 'Hello, how are you today ?',
+        this.state.speech.speak({text: this.state.answer,
             queue: false,
             listeners: {
                 onend: () => {
-                    console.log('Here');
-                    console.log(this.state);
                     self.setState({
                         visibleLabel:true,
                         showAnswer: 'grey'
                     })
+                    self.props.resetTranscript();
                 },
             }
         })
@@ -41,12 +53,15 @@ class VoiceControl extends Component {
         setTimeout(function(){
             if(transcriptCopy == self.props.transcript) {
                 self.props.stopListening();
+                //REMOVE
+                console.log(self.props.transcript);
+                self.state.answer=self.props.transcript;
                 self.interpretResult();
             }
             else {
                 self.evaluateListening();
             }
-        },2000);
+        },3000);
     }
 
     micPressed = () => {
