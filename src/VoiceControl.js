@@ -2,30 +2,52 @@ import React, {Component} from 'react';
 import SpeechRecognition from "react-speech-recognition";
 import './App.css';
 import 'semantic-ui-css/semantic.min.css';
-import Speech from 'speak-tts'
-import {Button, Icon, Label, Transition, Message} from 'semantic-ui-react'
-
-//user md
+import Speech from 'speak-tts';
+import {Button, Icon, Label, Transition, Message, Divider} from 'semantic-ui-react';
 
 class VoiceControl extends Component {
-    state = {
-        visibleLabel: true,
-        input: '',
-        speech: null,
-        showAnswer:'grey',
-        answer:' '
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            apiResponse: "" ,
+            visibleLabel: true,
+            input: '',
+            speech: new Speech(),
+            showAnswer:'grey',
+            answer:' ',
+            loadingAnswer: false
+        };
+    }
+
+    callAPI() {
+        this.setState({
+            loadingAnswer:true,
+            visibleLabel:true
+        });
+        const transcript = this.props.transcript;
+        fetch("http://localhost:9000/testAPI/"+transcript)
+            .then(res => res.text())
+            .then(res => {
+                this.setState({ apiResponse: res });
+                this.setState({answer: res});
+                this.interpretResult();
+            });
+    }
+
+    componentWillMount() {
+
     }
 
     interpretResult = () => {
-
         if(this.state.answer == null || this.state.answer === '') {
-            console.log('Here');
-            console.log(this.state);
             this.setState({
                 visibleLabel:true,
-                showAnswer: 'grey'
+                showAnswer: 'grey',
+                loadingAnswer:false
             })
             this.props.resetTranscript();
+
             return;
         }
 
@@ -39,7 +61,8 @@ class VoiceControl extends Component {
                 onend: () => {
                     self.setState({
                         visibleLabel:true,
-                        showAnswer: 'grey'
+                        showAnswer: 'grey',
+                        loadingAnswer:false
                     })
                     self.props.resetTranscript();
                 },
@@ -54,9 +77,8 @@ class VoiceControl extends Component {
             if(transcriptCopy == self.props.transcript) {
                 self.props.stopListening();
                 //REMOVE
-                console.log(self.props.transcript);
-                self.state.answer=self.props.transcript;
-                self.interpretResult();
+                self.setState({answer: self.props.transcript});
+                self.callAPI();
             }
             else {
                 self.evaluateListening();
@@ -65,14 +87,13 @@ class VoiceControl extends Component {
     }
 
     micPressed = () => {
-        this.setState((prevState) => ({visibleLabel: false}))
+        this.setState({visibleLabel: false});
         this.props.startListening();
         this.evaluateListening();
     }
 
     render() {
-
-        const { visibleLabel, input, showAnswer} = this.state
+        const { visibleLabel, input, showAnswer, loadingAnswer} = this.state
         const {transcript, resetTranscript, browserSupportsSpeechRecognition } = this.props
         const MessageExampleIcon = () => (
             <Message>
@@ -84,8 +105,7 @@ class VoiceControl extends Component {
             </Message>
         )
 
-        const mySpeech = new Speech()
-        mySpeech.init({
+        this.state.speech.init({
             'volume': 1,
             'lang': 'en-GB',
             'rate': 1,
@@ -93,7 +113,6 @@ class VoiceControl extends Component {
             'voice':'Google UK English Male',
             'splitSentences': true,
         })
-        this.state.speech = mySpeech
 
         return (
             <div>
@@ -101,12 +120,16 @@ class VoiceControl extends Component {
                     <i aria-hidden="true" className={ showAnswer+" big user md circular inverted icon"}/>
                 </div>
                 <br/>
+                <div style={{height:'30px', margin:'0 auto'}}>
+                    { loadingAnswer && <i aria-hidden="true" className="spinner loading icon"></i> }
+                </div>
+                <br/>
                 <br/>
                 <div>
-                    <Button disabled={!visibleLabel} circular color='red' icon='microphone' size='massive' onClick={this.micPressed} />
+                    <Button disabled={!visibleLabel ^ loadingAnswer} circular color='red' icon='microphone' size='massive' onClick={()=>this.micPressed()} />
                 </div>
                 <div>
-                    <Transition visible={visibleLabel} animation='fade up' duration={500}>
+                    <Transition visible={visibleLabel && !loadingAnswer} animation='fade up' duration={500}>
                         <Label basic pointing style={{backgroundColor:'white'}}>
                             Press to interact
                         </Label>
@@ -114,7 +137,7 @@ class VoiceControl extends Component {
                     { !visibleLabel && <br/> }
                 </div>
                 {
-                    !visibleLabel && <MessageExampleIcon/>
+                    !visibleLabel &&  <MessageExampleIcon/>
                 }
             </div>
         )
