@@ -138,7 +138,7 @@ class VoiceControl extends Component {
                 <div>
                     <Transition visible={visibleLabel && !loadingAnswer} animation='fade up' duration={500}>
                         <Label basic pointing style={{backgroundColor:'white'}}>
-                            Press to interact
+                            Press to interact or say "Hello doctor"
                         </Label>
                     </Transition>
                     { !visibleLabel && <br/> }
