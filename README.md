@@ -1,68 +1,67 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+This app allows to user to get the latest updates about COVID-19. The interface counts with a single button with a microphone icon that when it is pressed start converting the user speech into text. When the app detects that the user stop talking the transcript is passed to Dialog Flow and the intent is returned. The server reply is given to the user via voice and while the app is replying all the input commands are disabled. Additionally, a functionality like "hey Siri" form Apple was implemented using the phrase "Hello doctor" that will trigger the app to recognize the user request.
 
-In the project directory, you can run:
+### Tools Used
 
-### `npm start`
+OS: macOS Catalina 10.15.4
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Google Chrome: 81.0.4044.122 (Official Build) (64-bit)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+JetBrains WebStorm: 2020.1
 
-### `npm test`
+React
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+SemanticUI
 
-### `npm run build`
+ExpressJS
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Dependencies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### React APP
+```
+"@testing-library/jest-dom": "^4.2.4",
+"@testing-library/react": "^9.5.0",
+"@testing-library/user-event": "^7.2.1",
+"client-oauth2": "^4.2.5",
+"cors": "^2.8.5",
+"dialogflow": "^1.2.0",
+"express": "^4.17.1",
+"firebase-admin": "^8.10.0",
+"google-auth-library": "^6.0.0",
+"react": "^16.13.1",
+"react-dom": "^16.13.1",
+"react-native-pulse-animation": "^0.1.1",
+"react-scripts": "3.4.1",
+"react-speech-recognition": "^2.0.4",
+"reactstrap": "^8.4.1",
+"semantic-ui-css": "^2.4.1",
+"semantic-ui-react": "^0.88.2",
+"speak-tts": "^2.0.8"
+```
+#### Express Server
 
-### `npm run eject`
+```
+"cookie-parser": "~1.4.4",
+"cors": "^2.8.5",
+"debug": "~2.6.9",
+"dialogflow": "^1.2.0",
+"express": "~4.16.1",
+"http-errors": "~1.6.3",
+"jade": "~1.11.0",
+"morgan": "~1.9.1",
+"uuid": "^7.0.3"
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Compile
+N/A
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### How to run
+It is require to start both servers the React that runs on port 3000 and the Express that runs on port 9000.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+1- Running Express server: run ```"npm start"``` in ./cen4725-covid19/api/
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+2- Running React server: run ```"npm start"``` in ./cen4725-covid19/
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+3- Open web browser and enter url "http://localhost:3000/"
