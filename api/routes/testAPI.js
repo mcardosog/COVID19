@@ -23,6 +23,7 @@ async function getIntent(transcript) {
             },
         },
     };
+    console.log(request);
     const responses = await sessionClient.detectIntent(request);
     return responses;
 }
@@ -30,8 +31,12 @@ async function getIntent(transcript) {
 router.get("/:transcript", function(req, res, next) {
     getIntent(req.params.transcript).then((responseIntent) =>{
         if(responseIntent != null && responseIntent.length > 0) {
-            console.log(responseIntent[0]);
-            res.send(responseIntent[0].queryResult.fulfillmentText);
+            const queryResults = responseIntent[0].queryResult.fulfillmentMessages;
+            var response = '';
+            for(var i=0; i < queryResults.length; i++) {
+                response = response+' '+queryResults[i].text.text[0];
+            }
+            res.send(response);
         }
         else {
             res.send("Unable to connect with the server. Please check the app settings");

@@ -59,14 +59,15 @@ class VoiceControl extends Component {
             queue: false,
             listeners: {
                 onend: () => {
-                    self.setState({
-                        visibleLabel:true,
-                        showAnswer: 'grey',
-                        loadingAnswer:false
-                    })
-                    self.props.resetTranscript();
                 },
             }
+        }).then(()=>{
+            self.setState({
+                visibleLabel:true,
+                showAnswer: 'grey',
+                loadingAnswer:false
+            })
+            self.props.resetTranscript();
         })
     }
 
