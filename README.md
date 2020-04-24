@@ -55,7 +55,11 @@ ExpressJS
 ```
 
 ### Compile
-N/A
+It is require to install all dependencies for the React  and Express servers.
+
+1- Express server: run ```"npm install"``` in ./cen4725-covid19/api/
+
+2- React server: run ```"npm install"``` in ./cen4725-covid19/
 
 ### How to run
 It is require to start both servers the React that runs on port 3000 and the Express that runs on port 9000.
