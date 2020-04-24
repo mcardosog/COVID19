@@ -35,10 +35,6 @@ class VoiceControl extends Component {
             });
     }
 
-    componentWillMount() {
-
-    }
-
     interpretResult = () => {
         if(this.state.answer == null || this.state.answer === '') {
             this.setState({
@@ -47,7 +43,7 @@ class VoiceControl extends Component {
                 loadingAnswer:false
             })
             this.props.resetTranscript();
-
+            this.props.startListening();
             return;
         }
 
@@ -68,6 +64,7 @@ class VoiceControl extends Component {
                 loadingAnswer:false
             })
             self.props.resetTranscript();
+            this.props.startListening();
         })
     }
 
@@ -93,6 +90,14 @@ class VoiceControl extends Component {
         this.evaluateListening();
     }
 
+    componentDidUpdate(prevProps) {
+        if(!this.state.visibleLabel) { return; }
+        if(this.props.transcript.includes('hello doctor') || this.props.transcript.includes('hello doctor') ) {
+            this.props.resetTranscript();
+            this.micPressed();
+        }
+    }
+
     render() {
         const { visibleLabel, input, showAnswer, loadingAnswer} = this.state
         const {transcript, resetTranscript, browserSupportsSpeechRecognition } = this.props
@@ -105,6 +110,7 @@ class VoiceControl extends Component {
                 </Message.Content>
             </Message>
         )
+
 
         this.state.speech.init({
             'volume': 1,
@@ -145,6 +151,6 @@ class VoiceControl extends Component {
     }
 }
 const options = {
-    autoStart: false
+    autoStart: true //false
 }
 export default SpeechRecognition(options)(VoiceControl);
